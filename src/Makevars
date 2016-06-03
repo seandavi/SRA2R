@@ -1,1 +1,7 @@
-PKG_LIBS = -L/usr/local/ncbi/ncbi-vdb/lib64/ -L/usr/local/ngs/ngs-sdk/lib64 -lncbi-ngs-c++ -lngs-c++ -lngs-bam-c++ -lncbi-ngs-c++ -lncbi-vdb-static -lngs-adapt-c++
+CC  = clang
+CXX = clang++
+NGS_HOME = /tmp/ngs-sdk.1.2.4-linux
+
+PKG_CPPFLAGS = -I${NGS_HOME}/include 
+PKG_LIBS = -L${NGS_HOME}/lib64 -L${NGS_HOME}/lib64 -lncbi-ngs-c++ -lngs-c++ -lngs-bam-c++ -lncbi-ngs-c++ -lncbi-vdb-static -lngs-adapt-c++
+PKG_CXXFLAGS = -mmacosx-version-min=10.8

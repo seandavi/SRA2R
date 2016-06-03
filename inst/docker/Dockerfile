@@ -1,10 +1,8 @@
 ############################################################
-# Dockerfile to build hisat2 container images
-# Based on Ubuntu
+# Dockerfile to do development for SRA2R and NCBI NGS SDK
 ############################################################
 
-# Set the base image to Ubuntu
-FROM bioconductor/devel
+FROM bioconductor/release_sequencing
 
 # File Author / Maintainer
 MAINTAINER Sean Davis
@@ -18,7 +16,7 @@ ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 
 # Update the repository sources list
-RUN apt-get update  && apt-get -y install samtools=0.1.19-1 && apt-get install -y wget
+RUN apt-get update && apt-get install -y wget
 
 # Install compiler and perl stuff
 RUN apt-get install --yes build-essential git \
@@ -47,4 +45,5 @@ RUN apt-get clean
 WORKDIR /root
 
 # Default command to execute at startup of the container
-CMD /bin/bash
+
+CMD ["/init"]
