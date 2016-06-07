@@ -1,7 +1,9 @@
 CC  = clang
 CXX = clang++
-NGS_HOME = /tmp/ngs-sdk.1.2.4-linux
+NGS_HOME = /usr/local/ngs/ngs-sdk
+VDB_HOME = /usr/local/ncbi/ncbi-vdb
+BAM_HOME = /usr/local/ngs/ngs-bam
 
-PKG_CPPFLAGS = -I${NGS_HOME}/include 
-PKG_LIBS = -L${NGS_HOME}/lib64 -L${NGS_HOME}/lib64 -lncbi-ngs-c++ -lngs-c++ -lngs-bam-c++ -lncbi-ngs-c++ -lncbi-vdb-static -lngs-adapt-c++
-PKG_CXXFLAGS = -mmacosx-version-min=10.8
+PKG_CPPFLAGS = -I${NGS_HOME}/include -I${VDB_HOME}/include -I${BAM_HOME}/include
+PKG_LIBS = -L${BAM_HOME}/lib64 -L${NGS_HOME}/lib64 -L${VDB_HOME}/lib64 -lncbi-ngs-c++ -lngs-c++ -lngs-bam-c++ -lncbi-ngs-c++ -lncbi-vdb-static -lngs-adapt-c++
+#PKG_CXXFLAGS = -mmacosx-version-min=10.8
