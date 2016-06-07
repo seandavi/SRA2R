@@ -28,10 +28,11 @@ RUN apt-get install --yes build-essential git \
    python-numpy \
    python-matplotlib 
 
+COPY install_ngs_sdk.sh /tmp/
+
 # get NBCI Toolkit
 WORKDIR /tmp
-RUN wget "http://ftp-trace.ncbi.nlm.nih.gov/sra/ngs/1.2.4/ngs-sdk.1.2.4-linux.tar.gz" && \
-    tar zxfv ngs-sdk.1.2.4-linux.tar.gz
+RUN bash /tmp/install_ngs_sdk.sh
 
 # Compile
 #RUN make USE_SRA=1 NCBI_NGS_DIR=/tmp/ngs-sdk.1.2.3-linux NCBI_VDB_DIR=/tmp/ngs-sdk.1.2.3-linux
