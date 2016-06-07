@@ -98,3 +98,17 @@ x = read.delim(text = system('~/sratoolkit.2.5.7-ubuntu64/bin/sra-pileup -r chr2
 ## Link to presentation to a small example of using read fastq from SRA
 
 - http://ec2-52-90-90-120.compute-1.amazonaws.com/presentation/view#/
+
+## Setting up Docker on local machine
+In terminal:
+```
+docker run -d -p 8787:8787 seandavi/sra2r       ## run docker in background and mirror site running RStudio
+
+docker-machine ip                               ## obtain IP address of Docker machine
+
+docker exec -ti e264 /bin/bash                  ## run terminal in Docker machine
+```
+In browser:
+```
+192.168.99.100:8787                             ## navigate to RStudio running on Docker
+```
