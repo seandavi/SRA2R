@@ -1,12 +1,12 @@
 Package: SRA2R
 Type: Package
-Title: What the package does (short line)
+Title: Connect to NCBI SRA from R and Bioconductor
 Version: 1.0
 Date: 2016-01-04
-Author: Rosa Choe
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: Rosa Choe, Sean Davis
+Maintainer: Sean Davis <seandavi@gmail.com>
+Description: Connect to NCBI SRA from R and Bioconductor
+License: MIT
 VignetteBuilder: knitr
 Suggests: BiocStyle, knitr, rmarkdown
 LinkingTo: Rcpp, Biostrings, XVector, IRanges, S4Vectors
