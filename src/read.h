@@ -11,5 +11,5 @@
 #include <math.h>
 #include <iostream>
 
-long getFastqCount(Rcpp::String acc);
+long getFastqCount(Rcpp::String acc, bool forward_to_r);
 #endif

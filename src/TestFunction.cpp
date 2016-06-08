@@ -19,31 +19,35 @@ using namespace std;
 
 
 // http://stackoverflow.com/questions/12975341/to-string-is-not-a-member-of-std-says-so-g
-namespace patch
-{
-template < typename T > std::string to_string( const T& n )
-{
-  std::ostringstream stm ;
-  stm << n ;
-  return stm.str() ;
-}
+// namespace patch
+// {
+// template < typename T > std::string to_string( const T& n )
+// {
+//   std::ostringstream stm ;
+//   stm << n ;
+//   return stm.str() ;
+// }
+// }
+
+std::string to_string(int n) {
+  std::ostringstream stm;
+  stm << n;
+  return stm.str();
 }
 
 // [[Rcpp::export]]
 CharacterVector getAccessions(std::string prefix = "SRR") {
   vector<string> accs;
   long tester;
-  std::cout << typeid(getFastqCount("SRR100008")).name() << endl;
   for (int i = 100000; i < 100010; i++) {
-    string acc = prefix;
-    acc += patch::to_string(i);
     try {
-      getFastqCount(acc);
-      accs.push_back(acc);
-    } catch (std::exception) {
-  
+      string acc = prefix;
+      acc += to_string(i);
+      if (getFastqCount(acc, false) > 0) {
+        accs.push_back(acc);
+      }
     } catch (...) {
-      
+      continue;
     }
   }
   int n = accs.size();
