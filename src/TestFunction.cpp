@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <fstream>
 using namespace Rcpp;
 using namespace std;
 
@@ -29,27 +30,34 @@ using namespace std;
 // }
 // }
 
-std::string to_string(int n) {
+std::string to_string(long int n) {
   std::ostringstream stm;
   stm << n;
   return stm.str();
 }
 
 // [[Rcpp::export]]
-CharacterVector getAccessions(std::string prefix = "SRR") {
+CharacterVector getAccessions(long int start = 100000, long int stop = 100010, std::string prefix = "SRR", std::string file = "SRR.txt") {
   vector<string> accs;
   long tester;
-  for (int i = 100000; i < 100010; i++) {
+  ofstream ofs;
+  ofs.open(file.c_str());
+  for (long int i = start; i < stop; i++) {
     try {
       string acc = prefix;
       acc += to_string(i);
+      cout << i;
       if (getFastqCount(acc, false) > 0) {
         accs.push_back(acc);
+        ofs << acc << " ";
+        cout << " ✓";
       }
+      cout << endl;
     } catch (...) {
       continue;
     }
   }
+  ofs.close();
   int n = accs.size();
   CharacterVector returnVector(n);
   for (int i = 0; i < n; i++) {
