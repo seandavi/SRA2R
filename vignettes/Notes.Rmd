@@ -1,0 +1,40 @@
+---
+title: "Notes"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Getting started
+Set Project to SRA2R
+```{r eval=FALSE}
+library(devtools)
+library(SRAdb)
+load_all()
+```
+
+## Download/Load SQLite database
+```{r eval=FALSE} 
+if(file.exists('SRAmetadb.sqlite')) {
+  sra_dbname = 'SRAmetadb.sqlite'
+  sra_con = dbConnect(dbDriver("SQLite"), sra_dbname)
+} else {
+  getSRAdbFile(destdir = getwd(), destfile = "SRAmetadb.sqlite.qz", method)
+}
+```
+
+## Isolating controlled access reads
+```{r eval=FALSE}
+system('wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra//reports/Metadata/SRA_Accessions.tab')
+cmd_cut = "cut -f 1,9 $PQD/SRA_Accessions.tab"
+df = read.delim(pipe(cmd_cut))
+private_df = df[df$Visibility == 'controlled_access',]
+```
+
+### Usage
+```{r eval=FALSE} 
+accs = getSRA(search_terms = "breast cancer homo sapiens", sra_con = sra_con, acc_only = TRUE)
+accs = accs[!(accs$run %in% private_df$Accession),"run"]
+```

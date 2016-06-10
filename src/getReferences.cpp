@@ -1,4 +1,5 @@
 #include <Rcpp.h>
+#include "read.h"
 #include <ncbi-vdb/NGS.hpp>
 #include <ngs-bam/ngs-bam.hpp>
 #include <ngs/ErrorMsg.hpp>

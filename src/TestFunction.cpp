@@ -5,19 +5,22 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <ncbi-vdb/NGS.hpp>
+#include <ngs-bam/ngs-bam.hpp>
+#include <ngs/ErrorMsg.hpp>
+#include <ngs/ReadCollection.hpp>
+#include <ngs/ReadIterator.hpp>
+#include <ngs/Read.hpp>
+
+#include <ngs/Reference.hpp>
+#include <ngs/Alignment.hpp>
+#include <ngs/PileupIterator.hpp>
+
+#include <math.h>
+#include <iostream>
 using namespace Rcpp;
 using namespace std;
-
-// This is a simple example of exporting a C++ function to R. You can
-// source this function into an R session using the Rcpp::sourceCpp 
-// function (or via the Source button on the editor toolbar). Learn
-// more about Rcpp at:
-//
-//   http://www.rcpp.org/
-//   http://adv-r.had.co.nz/Rcpp.html
-//   http://gallery.rcpp.org/
-//
-
+using namespace ngs;
 
 // http://stackoverflow.com/questions/12975341/to-string-is-not-a-member-of-std-says-so-g
 // namespace patch
@@ -67,10 +70,20 @@ CharacterVector getAccessions(long int start = 100000, long int stop = 100010, s
   return CharacterVector();
 }
 
-
-// You can include R code blocks in C++ files processed with sourceCpp
-// (useful for testing and development). The R code will be automatically 
-// run after the compilation.
-//
-
+DataFrame getReferenceCount(CharacterVector accs) {
+  vector<string> refs;
+  vector<int> refCount;
+  int n = accs.size();
+  for (int i = 0; i < n; i++) {
+    try {
+      CharacterVector c = getReference(as<string>(accs[i]))["Length"];
+      if (c.size() > 0) {
+        refs.push_back(as<string>(accs[i]));
+        refCount.push_back(c.size());
+      }
+    } catch(...) {
+    }
+  }
+  return DataFrame::create(_["Run"]= refs, _["ReferenceCount"]= refCount);
+}
 
