@@ -8,8 +8,19 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Getting started
+Clone SRA2R Project from GitHub
+```{r eval=FALSE}
+file > New Project... > Version Control > Git > Repository URL: https://github.com/rosachoe/SRA2R.git
+```
+
 Set Project to SRA2R
 ```{r eval=FALSE}
+install.packages("roxygen2")
+### SRAdb
+source("https://bioconductor.org/biocLite.R")
+biocLite("SRAdb")
+
+library(roxygen2)
 library(devtools)
 library(SRAdb)
 load_all()
@@ -26,9 +37,14 @@ if(file.exists('SRAmetadb.sqlite')) {
 ```
 
 ## Isolating controlled access reads
+In Terminal:
 ```{r eval=FALSE}
-system('wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra//reports/Metadata/SRA_Accessions.tab')
-cmd_cut = "cut -f 1,9 $PQD/SRA_Accessions.tab"
+wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra//reports/Metadata/SRA_Accessions.tab
+```
+
+In R:
+```{r eval=FALSE}
+cmd_cut = "cut -f 1,9 $PWD/SRA_Accessions.tab"
 df = read.delim(pipe(cmd_cut))
 private_df = df[df$Visibility == 'controlled_access',]
 ```
