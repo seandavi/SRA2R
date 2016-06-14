@@ -70,12 +70,14 @@ CharacterVector getAccessions(long int start = 100000, long int stop = 100010, s
   return CharacterVector();
 }
 
+// [[Rcpp::export]]
 DataFrame getReferenceCount(CharacterVector accs) {
   vector<string> refs;
   vector<int> refCount;
   int n = accs.size();
   for (int i = 0; i < n; i++) {
     try {
+      cout << i << endl;
       CharacterVector c = getReference(as<string>(accs[i]))["Length"];
       if (c.size() > 0) {
         refs.push_back(as<string>(accs[i]));

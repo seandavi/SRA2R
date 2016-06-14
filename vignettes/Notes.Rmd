@@ -50,7 +50,33 @@ private_df = df[df$Visibility == 'controlled_access',]
 ```
 
 ### Usage
+Getting public access reads from search
 ```{r eval=FALSE} 
 accs = getSRA(search_terms = "breast cancer homo sapiens", sra_con = sra_con, acc_only = TRUE)
 accs = accs[!(accs$run %in% private_df$Accession),"run"]
+```
+
+Getting aligned reads
+```{R eval=FALSE}
+accs = getReferenceCount(accs)
+```
+
+GenomicAlignments, GenomicReads, ShortRead
+```{R eval=FALSE}
+source("https://bioconductor.org/biocLite.R")
+biocLite("ShortRead")
+biocLite("GenomicReads")
+biocLite("GenomicAlignments")
+```
+
+GenomicAlignments vs GenomicReads
+```{R eval=FALSE}
+GenomicReads takes in manual input of lists for ranges and represents these locations as a table, whereas GenomicAlignments takes in files (.BAM) and converts them to a table form similar to that of GenomicReads. They can be used in conjunction, where GenomicReads would represent a constant set of locations, such as where a specific gene is located, and GenomicAlignments would represent reads from a specific organism/sample. Using the %over% function allows us to see if the samples overlap with the gene of interest.
+```
+
+Shared Files with Local Machine and Docker
+```{R eval=FALSE}
+1. Download file to Local Machine
+2. docker-machine scp (-rcp) <filename> default:<filename>
+3. docker run -v /home/docker/<filename>:<filename>
 ```
