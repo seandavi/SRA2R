@@ -88,4 +88,34 @@ DataFrame getReferenceCount(CharacterVector accs) {
   }
   return DataFrame::create(_["Run"]= refs, _["ReferenceCount"]= refCount);
 }
-
+// [[Rcpp::export]]
+Rcpp::List getGAlignmentsData(std::string acc) {
+  ReadCollection run = ncbi::NGS::openReadCollection(acc);
+  CharacterVector seqnames, strand, cigar;
+  IntegerVector qwidth, start, end, width, njunc;
+  
+  AlignmentIterator ai = run.getAlignments(Alignment::primaryAlignment);
+  int counter = 1;
+  while(ai.nextAlignment()) {
+    cout << counter << endl;
+    seqnames.push_back(ai.getReferenceSpec());
+    strand.push_back(ai.getRNAOrientation());
+    cigar.push_back(ai.getShortCigar(false).toString()); //test true or false; short or long
+    qwidth.push_back(ai.getTemplateLength());
+    start.push_back(ai.getAlignmentPosition());
+    end.push_back(ai.getAlignmentPosition() + ai.getAlignmentLength() - 1);
+    width.push_back(ai.getAlignmentLength());
+    njunc.push_back(0); //idk what this does
+    counter = counter + 1;
+  }
+  return List::create(
+    _["seqnames"] = seqnames,
+    _["strand"] = strand,
+    _["cigar"] = cigar,
+    _["qwidth"] = qwidth,
+    _["start"] = start,
+    _["end"] = end,
+    _["width"] = width,
+    _["njunc"] = njunc
+  );
+}
