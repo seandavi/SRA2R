@@ -89,7 +89,7 @@ DataFrame getReferenceCount(CharacterVector accs) {
   return DataFrame::create(_["Run"]= refs, _["ReferenceCount"]= refCount);
 }
 // [[Rcpp::export]]
-Rcpp::List getGAlignmentsData(std::string acc) {
+Rcpp::DataFrame getGAlignmentsData(std::string acc) {
   ReadCollection run = ncbi::NGS::openReadCollection(acc);
   CharacterVector seqnames, strand, cigar;
   IntegerVector qwidth, start, end, width, njunc;
@@ -108,7 +108,7 @@ Rcpp::List getGAlignmentsData(std::string acc) {
     njunc.push_back(0); //idk what this does
     counter = counter + 1;
   }
-  return List::create(
+  return DataFrame::create(
     _["seqnames"] = seqnames,
     _["strand"] = strand,
     _["cigar"] = cigar,
