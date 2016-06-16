@@ -26,4 +26,5 @@ using namespace ngs;
 
 long getFastqCount(Rcpp::String acc, bool forward_to_r);
 DataFrame getReference(Rcpp::String acc);
+std::vector<std::vector<std::string>> getRefs(std::string acc);
 #endif

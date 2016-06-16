@@ -13,28 +13,11 @@ Clone SRA2R Project from GitHub
 file > New Project... > Version Control > Git > Repository URL: https://github.com/rosachoe/SRA2R.git
 ```
 
-###Set Project to SRA2R
+Set Project to SRA2R
+
+###Run Set-up
 ```{r eval=FALSE}
-install.packages("roxygen2")
-### SRAdb
-source("https://bioconductor.org/biocLite.R")
-biocLite("SRAdb")
-biocLite("ShortRead")
-biocLite("GenomicRanges")
-biocLite("GenomicAlignments")
-
-library(roxygen2)
-library(devtools)
-library(SRAdb)
-library(ShortRead)
-library(GenomicRanges)
-library(GenomicAlignments)
-load_all()
-```
-
-```{r echo=FALSE,include=FALSE}
-library(GenomicRanges)
-library(GenomicAlignments)
+source("inst/scripts/Setup.R")
 ```
 
 ### Download/Load SQLite database
@@ -43,7 +26,7 @@ if(file.exists('SRAmetadb.sqlite')) {
   sra_dbname = 'SRAmetadb.sqlite'
   sra_con = dbConnect(dbDriver("SQLite"), sra_dbname)
 } else {
-  getSRAdbFile(destdir = getwd(), destfile = "SRAmetadb.sqlite.qz", method)
+  getSRAdbFile()
 }
 ```
 
@@ -78,7 +61,7 @@ accs = getReferenceCount(accs)
 ```
 
 ###Loading Data into GenomicReads
-```{r eval=TRUE}
+```{r eval=FALSE}
 gr <- GRanges(seqnames = Rle(c("chr1", "chr2", "chr1", "chr3"), 
                              c(1, 3, 2, 4)), 
               ranges = IRanges(1:10, 
@@ -94,12 +77,17 @@ gr2 = GRanges(seqnames='chr1', ranges=IRanges(1,4))
 ```
 
 ###Loading Data into GenomicAlignments
-```{r eval=TRUE}
-ar = readGAlignments("/Users/choer/Downloads/wgEncodeRikenCageGm12878CellPapAlnRep1.bam")
+####From File
+```{r eval=FALSE}
+ar = readGAlignments("/Users/choer/Downloads/ERR1189688.bam")
+```
+####From SRA
+```{R eval=FALSE}
+ar = getGAlignmentsData("ERR1189688")
 ```
 
 ###Example Usage
-```{r eval=TRUE}
+```{r eval=FALSE}
 gr %over% gr2
 gr2 %over% gr
 which(gr %over% gr2)
