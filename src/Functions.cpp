@@ -25,7 +25,6 @@ using namespace ngs;
 
 //[[Rcpp::plugins(cpp11)]]
 int cigarToQueryWidth(std::string cigar) {
-  int arr[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
   int sum = 0;
   if (cigar.length() == 0) {
     return 0;

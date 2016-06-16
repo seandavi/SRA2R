@@ -9,15 +9,11 @@ sortAlignments = function(g) {
 install.packages("roxygen2")
 ### SRAdb
 source("https://bioconductor.org/biocLite.R")
-biocLite("SRAdb")
-biocLite("ShortRead")
 biocLite("GenomicRanges")
 biocLite("GenomicAlignments")
 
 library(roxygen2)
 library(devtools)
-library(SRAdb)
-library(ShortRead)
 library(GenomicRanges)
 library(GenomicAlignments)
 load_all()
