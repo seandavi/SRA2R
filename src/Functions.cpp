@@ -1,3 +1,4 @@
+
 #include <Rcpp.h>
 #include "read.h"
 #include <Rdefines.h>
@@ -22,21 +23,22 @@ using namespace Rcpp;
 using namespace std;
 using namespace ngs;
 
-// http://stackoverflow.com/questions/12975341/to-string-is-not-a-member-of-std-says-so-g
-// namespace patch
-// {
-// template < typename T > std::string to_string( const T& n )
-// {
-//   std::ostringstream stm ;
-//   stm << n ;
-//   return stm.str() ;
-// }
-// }
-
-std::string to_string(long int n) {
-  std::ostringstream stm;
-  stm << n;
-  return stm.str();
+//[[Rcpp::plugins(cpp11)]]
+int cigarToQueryWidth(std::string cigar) {
+  int arr[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  if (cigar.length() == 0) {
+    return 0;
+  }
+  string num;
+  while (cigar[0] >= 48 && cigar[0] <= 57) {
+    num = num + cigar[0];
+    cigar = cigar.substr(1);
+  }
+  if (cigar[0] == 'S' || cigar[0] == 'M' || cigar[0] == 'I') {
+    return std::stoi(num) + cigarToQueryWidth(cigar.substr(1));
+  } else { //'D'
+    return cigarToQueryWidth(cigar);
+  }
 }
 
 // [[Rcpp::export]]
@@ -48,7 +50,7 @@ CharacterVector getAccessions(long int start = 100000, long int stop = 100010, s
   for (long int i = start; i < stop; i++) {
     try {
       string acc = prefix;
-      acc += to_string(i);
+      acc += std::to_string(i);
       cout << i;
       if (getFastqCount(acc, false) > 0) {
         accs.push_back(acc);
@@ -99,9 +101,13 @@ Rcpp::DataFrame getGAlignmentsData(std::string acc) {
   while(ai.nextAlignment()) {
     cout << counter << endl;
     seqnames.push_back(ai.getReferenceSpec());
-    strand.push_back(ai.getRNAOrientation());
+    if (ai.getIsReversedOrientation()) {
+      strand.push_back("-");
+    } else {
+      strand.push_back("+");
+    }
     cigar.push_back(ai.getShortCigar(false).toString()); //test true or false; short or long
-    qwidth.push_back(ai.getTemplateLength());
+    qwidth.push_back(cigarToQueryWidth(ai.getShortCigar(false).toString()));
     start.push_back(ai.getAlignmentPosition());
     end.push_back(ai.getAlignmentPosition() + ai.getAlignmentLength() - 1);
     width.push_back(ai.getAlignmentLength());
@@ -119,3 +125,4 @@ Rcpp::DataFrame getGAlignmentsData(std::string acc) {
     _["njunc"] = njunc
   );
 }
+

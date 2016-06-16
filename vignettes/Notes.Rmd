@@ -13,20 +13,31 @@ Clone SRA2R Project from GitHub
 file > New Project... > Version Control > Git > Repository URL: https://github.com/rosachoe/SRA2R.git
 ```
 
-Set Project to SRA2R
+###Set Project to SRA2R
 ```{r eval=FALSE}
 install.packages("roxygen2")
 ### SRAdb
 source("https://bioconductor.org/biocLite.R")
 biocLite("SRAdb")
+biocLite("ShortRead")
+biocLite("GenomicRanges")
+biocLite("GenomicAlignments")
 
 library(roxygen2)
 library(devtools)
 library(SRAdb)
+library(ShortRead)
+library(GenomicRanges)
+library(GenomicAlignments)
 load_all()
 ```
 
-## Download/Load SQLite database
+```{r echo=FALSE,include=FALSE}
+library(GenomicRanges)
+library(GenomicAlignments)
+```
+
+### Download/Load SQLite database
 ```{r eval=FALSE} 
 if(file.exists('SRAmetadb.sqlite')) {
   sra_dbname = 'SRAmetadb.sqlite'
@@ -37,46 +48,71 @@ if(file.exists('SRAmetadb.sqlite')) {
 ```
 
 ## Isolating controlled access reads
-In Terminal:
+###In Terminal:
 ```{r eval=FALSE}
 wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra//reports/Metadata/SRA_Accessions.tab
 ```
 
-In R:
+###In R:
 ```{r eval=FALSE}
 cmd_cut = "cut -f 1,9 $PWD/SRA_Accessions.tab"
 df = read.delim(pipe(cmd_cut))
 private_df = df[df$Visibility == 'controlled_access',]
 ```
 
-### Usage
+## Usage
 Getting public access reads from search
 ```{r eval=FALSE} 
 accs = getSRA(search_terms = "breast cancer homo sapiens", sra_con = sra_con, acc_only = TRUE)
 accs = accs[!(accs$run %in% private_df$Accession),"run"]
 ```
 
-Getting aligned reads
-```{R eval=FALSE}
+###Getting aligned reads
+```{r eval=FALSE}
 accs = getReferenceCount(accs)
 ```
 
-GenomicAlignments, GenomicReads, ShortRead
-```{R eval=FALSE}
-source("https://bioconductor.org/biocLite.R")
-biocLite("ShortRead")
-biocLite("GenomicReads")
-biocLite("GenomicAlignments")
+###GenomicAlignments vs GenomicReads
+```{r eval=FALSE}
+"GenomicReads takes in manual input of lists for ranges and represents these locations as a table, whereas GenomicAlignments takes in files (.BAM) and converts them to a table form similar to that of GenomicReads. They can be used in conjunction, where GenomicReads would represent a constant set of locations, such as where a specific gene is located, and GenomicAlignments would represent reads from a specific organism/sample. Using the %over% function allows us to see if the samples overlap with the gene of interest."
 ```
 
-GenomicAlignments vs GenomicReads
-```{R eval=FALSE}
-GenomicReads takes in manual input of lists for ranges and represents these locations as a table, whereas GenomicAlignments takes in files (.BAM) and converts them to a table form similar to that of GenomicReads. They can be used in conjunction, where GenomicReads would represent a constant set of locations, such as where a specific gene is located, and GenomicAlignments would represent reads from a specific organism/sample. Using the %over% function allows us to see if the samples overlap with the gene of interest.
+###Loading Data into GenomicReads
+```{r eval=TRUE}
+gr <- GRanges(seqnames = Rle(c("chr1", "chr2", "chr1", "chr3"), 
+                             c(1, 3, 2, 4)), 
+              ranges = IRanges(1:10, 
+                               end = 7:16, 
+                               names = head(letters, 10)), 
+              strand = Rle(strand(c("-", "+", "*", "+", "-")), 
+                           c(1, 2, 2, 3, 2)), 
+              score = 1:10, 
+              GC = seq(1, 0, length=10))
+
+
+gr2 = GRanges(seqnames='chr1', ranges=IRanges(1,4))
 ```
 
-Shared Files with Local Machine and Docker
-```{R eval=FALSE}
+###Loading Data into GenomicAlignments
+```{r eval=TRUE}
+ar = readGAlignments("/Users/choer/Downloads/wgEncodeRikenCageGm12878CellPapAlnRep1.bam")
+```
+
+###Example Usage
+```{r eval=TRUE}
+gr %over% gr2
+gr2 %over% gr
+which(gr %over% gr2)
+which(gr2 %over% gr)
+any(gr %over% ar)
+any(gr2 %over% ar)
+```
+
+
+###Shared Files with Local Machine and Docker
+```{r eval=FALSE}
 1. Download file to Local Machine
 2. docker-machine scp (-rcp) <filename> default:<filename>
 3. docker run -v /home/docker/<filename>:<filename>
 ```
+
