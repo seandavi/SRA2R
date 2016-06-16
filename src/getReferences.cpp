@@ -1,4 +1,5 @@
 #include <Rcpp.h>
+#include "read.h"
 #include <ncbi-vdb/NGS.hpp>
 #include <ngs-bam/ngs-bam.hpp>
 #include <ngs/ErrorMsg.hpp>
@@ -9,6 +10,8 @@
 #include <ngs/Reference.hpp>
 #include <ngs/Alignment.hpp>
 #include <ngs/PileupIterator.hpp>
+#include <string>
+#include <vector>
 
 #include <math.h>
 #include <iostream>
@@ -37,7 +40,6 @@ using namespace Rcpp;
 //' @examples
 //' getReference('SRR390728')
 // [[Rcpp::export]]
-
 DataFrame getReference(Rcpp::String acc) {
   // open requested accession using SRA implementation of the API
    ReadCollection run = ncbi::NGS::openReadCollection ( acc );
@@ -63,7 +65,25 @@ DataFrame getReference(Rcpp::String acc) {
            _["CanonicalNames"] = out, _["CommonNames"] = out2, _["Length"] = out3, _["AlignmentCount"] = out4
        );
 }
+
+std::vector<std::vector<std::string>> getRefs(std::string acc) {
+  ReadCollection run = ncbi::NGS::openReadCollection ( acc );
   
+  Rcpp::String run_name ( run.getName () );
+  
+  ReferenceIterator it ( run.getReferences () );
+  vector<std::string> out;
+  vector<std::string> out2;
+  
+  while( it.nextReference () ) {
+    out.push_back(it.getCanonicalName()) ;
+    out2.push_back(it.getCommonName()) ;
+  }
+  std::vector<std::vector<std::string>> v;
+  v.push_back(out);
+  v.push_back(out2);
+  return v;
+}
 
 
    

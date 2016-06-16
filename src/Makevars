@@ -1,5 +1,6 @@
 CC  = clang
 CXX = clang++
+CXX_STD = CXX11
 NGS_HOME = /usr/local/ngs/ngs-sdk
 VDB_HOME = /usr/local/ncbi/ncbi-vdb
 BAM_HOME = /usr/local/ngs/ngs-bam

@@ -1,4 +1,5 @@
 #include <Rcpp.h>
+#include "read.h"
 #include <ncbi-vdb/NGS.hpp>
 #include <ngs-bam/ngs-bam.hpp>
 #include <ngs/ErrorMsg.hpp>
@@ -26,13 +27,15 @@ using namespace Rcpp;
 //' @examples
 //' getFastqCount('SRR000123')
 // [[Rcpp::export]]
-long getFastqCount(Rcpp::String acc) {
+long getFastqCount(Rcpp::String acc, bool forward_to_r = true) {
   try {
     ReadCollection run = ncbi::NGS::openReadCollection ( acc );
     long MAX_ROW = run.getReadCount ();
     return MAX_ROW;
-  } catch(std::exception &ex) {	
-    forward_exception_to_r(ex);
+  } catch(std::exception &ex) {
+    if (forward_to_r) {
+      forward_exception_to_r(ex);
+    }
     return -1;
   } catch(...) { 
     ::Rf_error("c++ exception (unknown reason)"); 
