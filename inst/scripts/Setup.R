@@ -2,7 +2,7 @@ library(dplyr)
 sortAlignments = function(g) {
   g2 = transform(g, n=nchar(as.character(seqnames)))
   h = select(g2[order(g2["n"], g2["seqnames"], g["start"], -g["end"]),], -c(9))
-  rownames(h) <- seq_along(h)
+  rownames(h) <- seq_along(h[,1])
   h
 }
 

@@ -20,6 +20,10 @@ Set Project to SRA2R
 source("inst/scripts/Setup.R")
 ```
 
+```{r eval=TRUE, echo=FALSE}
+source("Setup.R")
+```
+
 ### Download/Load SQLite database
 ```{r eval=FALSE} 
 if(file.exists('SRAmetadb.sqlite')) {
@@ -60,7 +64,7 @@ accs = getReferenceCount(accs)
 "GenomicReads takes in manual input of lists for ranges and represents these locations as a table, whereas GenomicAlignments takes in files (.BAM) and converts them to a table form similar to that of GenomicReads. They can be used in conjunction, where GenomicReads would represent a constant set of locations, such as where a specific gene is located, and GenomicAlignments would represent reads from a specific organism/sample. Using the %over% function allows us to see if the samples overlap with the gene of interest."
 ```
 
-###Loading Data into GenomicReads
+###Loading Data into GenomicRanges
 ```{r eval=FALSE}
 gr <- GRanges(seqnames = Rle(c("chr1", "chr2", "chr1", "chr3"), 
                              c(1, 3, 2, 4)), 
@@ -79,7 +83,7 @@ gr2 = GRanges(seqnames='chr1', ranges=IRanges(1,4))
 ###Loading Data into GenomicAlignments
 ####From File
 ```{r eval=FALSE}
-ar = readGAlignments("/Users/choer/Downloads/ERR1189688.bam")
+ar = readGAlignments("ERR1189688.bam")
 ```
 ####From SRA
 ```{R eval=FALSE}
