@@ -1,24 +1,34 @@
 # SRA2R
 SRA2R, a package to import SRA data directly into R
 
-## The Vignette
+# Developing on the package
 
-http://watson.nci.nih.gov/~sdavis/sra.html
+Right now, Docker is needed to work on the package.  This is because the NCBI NGS SDK is challenging to
+install.  We have a docker image based on Bioconductor/sequencing_release.
 
-### Developing on the package
+In a terminal:
 
-Checkout the package using git (or Rstudio) and change the working directory to the 
-SRA2R directory (with the DESCRIPTION file in it).
-
+```sh
+docker run -d -p 8787:8787 seandavi/sra2r       ## run docker in background and mirror site running RStudio
+docker-machine ip                               ## obtain IP address of Docker machine
+docker exec -ti DOCKER_PROCESS_ID /bin/bash     ## run terminal in Docker machine
 ```
+
+In a browser, navigate to http://192.168.99.100:8787 (or whatever host IP address is available for your system).
+RStudio will be running on the docker image, so connect to it (details depend on docker environment).
+Checkout the package using git (or Rstudio) and change the working directory to the 
+SRA2R directory (with the DESCRIPTION file in it).  Then, install the package for local development
+using devtools.
+
+```R
 install.packages('devtools')
 devtools::document()
 devtools::load_all()
 ```
 
-## SRA ToolKit examples
+# SRA ToolKit examples
 
-### sra-stat example 
+## sra-stat example 
 
 http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc&f=sra-stat
 
@@ -31,7 +41,7 @@ sra-stat --quick --xml SRR2971307
 sra-stat --quick --xml ERR1162649
 ```
 
-### sra-pileup
+## sra-pileup
 
 http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc&f=sra-pileup
 
@@ -48,14 +58,14 @@ x = getPileUp('SRR390728','chr20',1530960,1540960)
 ```
 
 
-## ncbi ngs SDK details
+# ncbi ngs SDK details
 
 - /usr/include/ngs (interfaces for C++ ngs)
 - /usr/include/ncbi-vdb (NGS.hpp)
 - /usr/local/share/doc/ngs (javadoc)
 - LD_LIBRARY_PATH = /usr/local/ngs/ngs-sdk/lib64:/usr/local/ncbi/ncbi-vdb/lib64:
 
-## R and Rcpp documentation of interest
+# R and Rcpp documentation of interest
 
 - http://dirk.eddelbuettel.com/code/rcpp/Rcpp-quickref.pdf
 - http://adv-r.had.co.nz/Rcpp.html
@@ -63,16 +73,3 @@ x = getPileUp('SRR390728','chr20',1530960,1540960)
 - http://statr.me/rcpp-note/index.html
 - https://cran.r-project.org/web/packages/Rcpp/vignettes/
 
-## Setting up Docker on local machine
-In terminal:
-```
-docker run -d -p 8787:8787 seandavi/sra2r       ## run docker in background and mirror site running RStudio
-
-docker-machine ip                               ## obtain IP address of Docker machine
-
-docker exec -ti e264 /bin/bash                  ## run terminal in Docker machine
-```
-In browser:
-```
-192.168.99.100:8787                             ## navigate to RStudio running on Docker
-```
