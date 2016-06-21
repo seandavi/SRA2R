@@ -45,36 +45,6 @@ int cigarToQueryWidth(std::string cigar) {
 }
 
 // [[Rcpp::export]]
-CharacterVector getAccessions(long int start = 100000, long int stop = 100010, std::string prefix = "SRR", std::string file = "SRR.txt") {
-  vector<string> accs;
-  long tester;
-  ofstream ofs;
-  ofs.open(file.c_str());
-  for (long int i = start; i < stop; i++) {
-    try {
-      string acc = prefix;
-      acc += std::to_string(i);
-      cout << i;
-      if (getFastqCount(acc, false) > 0) {
-        accs.push_back(acc);
-        ofs << acc << " ";
-        cout << " ✓";
-      }
-      cout << endl;
-    } catch (...) {
-      continue;
-    }
-  }
-  ofs.close();
-  int n = accs.size();
-  CharacterVector returnVector(n);
-  for (int i = 0; i < n; i++) {
-    returnVector[i] = accs.at(i);
-  }
-  return returnVector;
-}
-
-// [[Rcpp::export]]
 DataFrame getReferenceCount(CharacterVector accs) {
   vector<string> refs;
   vector<int> refCount;
@@ -92,8 +62,9 @@ DataFrame getReferenceCount(CharacterVector accs) {
   }
   return DataFrame::create(_["Run"]= refs, _["ReferenceCount"]= refCount);
 }
+
 // [[Rcpp::export]]
-Rcpp::DataFrame getGAlignmentsData(std::string acc) {
+SEXP getGAlignmentsData(std::string acc) {
   ReadCollection run = ncbi::NGS::openReadCollection(acc);
   CharacterVector seqnames, strand, cigar;
   IntegerVector qwidth, start, end, width, njunc;
@@ -101,10 +72,12 @@ Rcpp::DataFrame getGAlignmentsData(std::string acc) {
   AlignmentIterator ai = run.getAlignments(Alignment::primaryAlignment);
   std::vector<std::vector<std::string>> references = getRefs(acc);
   std::map<std::string,std::string> refs;
+  int count = 1;
   for (int i = 0; i < references.at(0).size(); i++) {
     refs[references.at(0).at(i)] = references.at(1).at(i);
   }
   while(ai.nextAlignment()) {
+    cout << count << endl;
     if(refs.find(ai.getReferenceSpec()) != refs.end()) {
       seqnames.push_back(refs[ai.getReferenceSpec()]);
     } else {
@@ -121,6 +94,7 @@ Rcpp::DataFrame getGAlignmentsData(std::string acc) {
     end.push_back(ai.getAlignmentPosition() + ai.getAlignmentLength());
     width.push_back(ai.getAlignmentLength());
     njunc.push_back(0); //idk what this does
+    count = count + 1;
   }
   DataFrame d = DataFrame::create(
     _["seqnames"] = seqnames,
