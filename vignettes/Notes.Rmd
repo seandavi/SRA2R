@@ -87,7 +87,7 @@ ar = readGAlignments("ERR1189688.bam")
 ```
 ####From SRA
 ```{R eval=FALSE}
-ar = getGAlignmentsData("ERR1189688")
+ar = getGAlignments("ERR1189688")
 ```
 
 ###Example Usage
