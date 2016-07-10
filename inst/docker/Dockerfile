@@ -42,6 +42,10 @@ WORKDIR /tmp
 
 RUN apt-get clean
 
+RUN R -e "install.packages(c('rmarkdown', 'shiny', 'devtools'), repos='http://cran.rstudio.com/')"
+#RUN R -e "devtools::install_github('seandavi/SRA2R')"
+
+
 # Set default working path
 WORKDIR /root
 
