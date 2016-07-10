@@ -7,7 +7,7 @@
 #' @param object an SRR class object
 #' 
 #' @return a ShortReadQ object
-#' @exportMethod 
+#' @exportMethod getReads
 setMethod('getReads',
           signature(object='SRR'),
           function(object,...) {

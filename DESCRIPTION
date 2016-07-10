@@ -11,4 +11,4 @@ VignetteBuilder: knitr
 Suggests: BiocStyle, knitr, rmarkdown
 LinkingTo: Rcpp, Biostrings, XVector, IRanges, S4Vectors
 RoxygenNote: 5.0.1
-Imports: Rcpp (>= 0.11.0)
+Imports: Rcpp (>= 0.11.0), xml2, rentrez, magrittr
