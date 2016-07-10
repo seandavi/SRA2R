@@ -2,7 +2,6 @@
 
 export(alignReads)
 export(alignReadsWithRegion)
-export(getBamReadsWithRegion)
 export(getFastqCount)
 export(getFastqReads)
 export(getFastqReadsWithQuality)

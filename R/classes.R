@@ -11,7 +11,7 @@
 # VIRTUAL base class
 setClass('.SRA2RBase')
 
-.srrRegex = '^[DSE]RR\\d{7}$'
+.srrRegex = '^[DSE]RR\\d{6}$'
 
 .srrValidity = function(object) {
   valid = grepl(.srrRegex,object,perl=TRUE)
@@ -40,9 +40,3 @@ setGeneric('getReads',function(object,...) {
   standardGeneric('getReads')
 })
 
-setMethod('getReads',
-          signature(object='character'),
-          function(object,...) {
-            return(getFastqReadsWithQuality(object,max_num_reads=100))
-          }
-)
