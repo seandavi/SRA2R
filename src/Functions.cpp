@@ -138,3 +138,18 @@ DataFrame cpp_getGAlignments(std::string acc, std::string seqname, int low_bound
     _["njunc"] = njunc
   );
 }
+
+//'
+//' This checks if a string is a valid accession
+//' @author Rosa Choe
+//' @param acc An accession string
+//' @return a boolean value representing whether or not the inputted string is a valid accession
+// [[Rcpp::export]]
+bool validAccession(std::string acc) {
+  try {
+    getReference(acc);
+    return true;
+  } catch (...){
+    return false;
+  }
+}

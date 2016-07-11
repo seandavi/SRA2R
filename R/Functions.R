@@ -51,3 +51,17 @@ callGAlignments = function(range, acc, sort, dataframe) {
     GAlignments(seqnames=Rle(factor(g$seqnames)), pos=g$start, cigar=as.character(g$cigar), strand=Rle(factor(as.character(g$strand), levels=c('+', '-', '*'))))
   }
 }
+
+searchSRA = function(search_terms, num = 20, public = TRUE) {
+  library(rentrez)
+  if (public) {
+    id <- entrez_search(db="sra", term=paste(search_terms, " AND cluster_public[prop]", sep = ""), retmax = num)
+  } else {
+    id <- entrez_search(db="sra", term=paste(search_terms, " AND cluster_dbgap[prop]", sep = ""), retmax = num)
+  }
+  acclist <- entrez_fetch("sra", id=id$ids, rettype = "acclist")
+  srr <- strsplit(acclist, '\n')[[1]]
+  srr <- srr[grepl( "^<Acc", srr, perl=TRUE)]
+  srr <- gsub( '<Acc>|</Acc>', '', srr, perl = T)
+  return(srr)
+}
