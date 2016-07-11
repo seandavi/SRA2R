@@ -1,5 +1,6 @@
 library(shiny)
 library(ggplot2)
+library(gtools)
 # Coverage plot representing pileup depth of given SRA accession and locationon genome
 ui <- shinyUI(fluidPage(
   titlePanel("Coverage Plot"),
@@ -15,9 +16,9 @@ ui <- shinyUI(fluidPage(
                    1,
                    min = 1),
       numericInput("stop",
-                "Stop",
-                0,
-                min = 0),
+                   "Stop",
+                   0,
+                   min = 0),
       numericInput("minDepth",
                    "Minimum Pileup Depth",
                    0, 
@@ -40,7 +41,7 @@ server <- shinyServer(function(input, output, clientData, session) {
   output$ref <- renderUI({
     if (validAccession(input$acc)) {
       refs = getReference(input$acc)
-      selectInput("ref", "Chromosome Name", sort(refs$CommonNames))
+      selectInput("ref", "Chromosome Name", mixedsort(as.character(refs$CommonNames)))
     } else {
       selectInput("ref", "Chromosome Name", list())
     }
