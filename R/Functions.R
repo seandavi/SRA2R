@@ -53,26 +53,24 @@ callGAlignments = function(range, acc, sort, dataframe) {
   }
 }
 
-
-#'
-#'
-#' Function to search SRA
+#' Search SRA using Eutils
 #' 
-#' @param search_terms String of terms to search
-#' @param num Integer value of how many accession IDs to return
-#' @param public Boolean value representing whether to return public or private access reads
-#' @return a character vector of accessions that match given search terms
+#' @param term The text used for searching
+#' @return A list of SRR ids
+#' 
 #' @export
-searchSRA = function(search_terms, num = 20, public = TRUE) {
-  library(rentrez)
-  if (public) {
-    id <- entrez_search(db="sra", term=paste(search_terms, " AND cluster_public[prop]", sep = ""), retmax = num)
-  } else {
-    id <- entrez_search(db="sra", term=paste(search_terms, " AND cluster_dbgap[prop]", sep = ""), retmax = num)
+#' @importFrom xml2 read_xml xml_children xml_text
+#' @importFrom rentrez entrez_search entrez_fetch
+#' @import magrittr
+#' 
+#' @examples 
+#' ids = searchSRA('breast cancer[WORD] AND cluster_public[prop]')
+#' head(ids)
+searchSRA = function(term) {
+  res = entrez_search(db="sra", term=term, use_history=TRUE)
+  ids = entrez_fetch('sra', web_history=res$web_history, rettype='acclist') %>% 
+    read_xml() %>% 
+    xml_children() %>%
+    xml_text()
+  return(ids)
   }
-  acclist <- entrez_fetch("sra", id=id$ids, rettype = "acclist")
-  srr <- strsplit(acclist, '\n')[[1]]
-  srr <- srr[grepl( "^<Acc", srr, perl=TRUE)]
-  srr <- gsub( '<Acc>|</Acc>', '', srr, perl = T)
-  return(srr)
-}

@@ -100,11 +100,9 @@ any(gr %over% ar)
 any(gr2 %over% ar)
 ```
 
-
 ###Shared Files with Local Machine and Docker
 ```{r eval=FALSE}
 1. Download file to Local Machine
 2. docker-machine scp (-rcp) <filename> default:<filename>
 3. docker run -v /home/docker/<filename>:<filename>
 ```
-
