@@ -38,6 +38,7 @@ getGAlignments = function(acc, seqnames = '*', start = 1, end = 0, ranges = NULL
 #' @param acc An accession
 #' @param sort Boolean value representing whether or not alignments should be sorted
 #' @param dataframe Boolean value representing whether return should be of type Data.Frame or not (GAlignments)
+#' @return GAlignments or DataFrame object representing reads that overlap with given range
 callGAlignments = function(range, acc, sort, dataframe) {
   g = cpp_getGAlignments(acc, seqname = as.character(seqnames(range)), low_bound=start(range), up_bound = end(range))
   g = transform(g, n=nchar(as.character(seqnames)))
@@ -52,6 +53,16 @@ callGAlignments = function(range, acc, sort, dataframe) {
   }
 }
 
+
+#'
+#'
+#' Function to search SRA
+#' 
+#' @param search_terms String of terms to search
+#' @param num Integer value of how many accession IDs to return
+#' @param public Boolean value representing whether to return public or private access reads
+#' @return a character vector of accessions that match given search terms
+#' @export
 searchSRA = function(search_terms, num = 20, public = TRUE) {
   library(rentrez)
   if (public) {
