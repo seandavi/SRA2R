@@ -3,13 +3,16 @@ install.packages("roxygen2", repos="http://cran.rstudio.com/")
 source("https://bioconductor.org/biocLite.R")
 biocLite("GenomicRanges")
 biocLite("GenomicAlignments")
+biocLite("VariantAnnotation")
 
 library(roxygen2)
 library(devtools)
 library(GenomicRanges)
 library(GenomicAlignments)
-load_all()
+library(VariantAnnotation)
 library(dplyr)
+load_all()
+
 sortAlignments = function(g) {
   g2 = transform(g, n=nchar(as.character(seqnames)))
   h = select(g2[order(g2["n"], g2["seqnames"], g["start"], -g["end"]),], -c(9))

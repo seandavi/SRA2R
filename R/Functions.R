@@ -73,4 +73,22 @@ searchSRA = function(term) {
     xml_children() %>%
     xml_text()
   return(ids)
-  }
+}
+
+
+#' Search SRA using Eutils
+#' 
+#' @param acc An accession or a path to an actual SRA file (with .sra suffix)
+#' @param refname Reference name for pile up
+#' @param start An in for position of start of pileup
+#' @param stop An in for position of stop of pileup
+#' @param MinPileUpDepth Coverage required
+#' @return A VRanges object representing pileup
+#' 
+#' @export
+pileupVRange = function(acc, refname, start = 1L, stop = 0L, MinPileUpDepth = 0L, Quality = FALSE) {
+  p = getPileUp(acc, refname, start, stop, MinPileUpDepth, Quality)
+  p = p[p$PileupDepth > 0,]
+  VRanges(Rle(refname), IRanges(p$ReferencePosition, p$ReferencePosition), p$ReferenceBase, p$AllAlignedBases)
+}
+

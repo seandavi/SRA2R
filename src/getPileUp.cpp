@@ -168,6 +168,109 @@ if ( Quality ) {
   
 }
 
+// DataFrame getPileUpVRanges(Rcpp::String acc, Rcpp::String refname, int start = 1, int stop = 0, int MinPileUpDepth = 1, bool Quality = false) {
+//   ReadCollection run = ncbi::NGS::openReadCollection(acc);
+//   
+//   ngs::Reference ref = run.getReference(refname);
+//   if (start == 1 && stop == 0){
+//     stop = ref.getLength();
+//   }
+//   
+//   long count = stop - start + 1;
+//   PileupIterator it = ref.getPileupSlice(start-1, count);
+//   
+//   vector<std::string> RefSpec;
+//   vector<long> RefPos;
+//   vector<char> RefBase;
+//   vector<long> PileDepth;
+//   vector<char> AlignedQuality;
+//   vector<std::string>  AllAlignedQuality;
+//   vector<char> AlignedBases;
+//   vector<std::string>  AlignedBase;
+//   vector<std::string> AllAcc;
+//   vector<std::string> strand;
+//   while (it.nextPileup())
+//   {
+//     if (it.getPileupDepth() >= MinPileUpDepth) {
+//       while (it.nextPileupEvent()) {
+//         PileupEvent::PileupEventType e = it.getEventType();
+//         if (!(e & (PileupEvent::alignment_start || PileupEvent::alignment_stop))) {
+//           RefSpec.push_back(it.getReferenceSpec());
+//           RefPos.push_back(it.getReferencePosition() + 1);
+//           RefBase.push_back(it.getReferenceBase());
+//           PileDepth.push_back(it.getPileupDepth());
+//           AllAcc.push_back(acc);
+//           if (Quality){
+//             AlignedQuality.push_back(it.getAlignmentQuality());
+//           }
+//           if (e & PileupEvent::insertion) {
+//             if (e & PileupEvent::alignment_minus_strand) {
+//               strand.push_back("-");
+//             } else {
+//               strand.push_back("+");
+//             }
+//             AlignedBase.push_back(it.getInsertionBases().toString());
+//           }
+//           if ((e & PileupEvent::alignment_minus_strand) != 0) {
+//             if (e & PileupEvent::deletion) {
+//               AlignedBase.push_back("<");
+//             }
+//           }
+//         }
+//         if ((e & PileupEvent::alignment_minus_strand) != 0)
+//         {
+//           switch (e & 7)
+//           {
+//           case PileupEvent::deletion:
+//             base += '<';
+//             break;
+//           case PileupEvent::match:
+//             base += ',';
+//             break;
+//           case PileupEvent::mismatch:
+//             base += tolower(it.getAlignmentBase());
+//             break;
+//           }
+//         }
+//         else
+//         {
+//           switch (e & 7)
+//           {
+//           case PileupEvent::deletion:
+//             base += '>';
+//             break;
+//           case PileupEvent::match:
+//             base += '.';
+//             break;
+//           case PileupEvent::mismatch:
+//             base += toupper(it.getAlignmentBase());
+//             break;
+//           }
+//         }
+//         if (e & PileupEvent::alignment_stop)
+//         {
+//           base += '$';
+//         }
+//       AllAlignedBases.push_back(base);  
+//       
+//       if (Quality) {
+//         std::string str(AlignedQuality.begin(),AlignedQuality.end());
+//         AllAlignedQuality.push_back(str);  
+//       }
+//     }
+//   }
+//   if (Quality) {
+//     return DataFrame::create (
+//         _["AccensionNumber"] = AllAcc, _["ReferenceSpec"] = RefSpec, _["ReferencePosition"] = RefPos, _["ReferenceBase"] = RefBase, _["PileupDepth"] = PileDepth , _["AllAlignedBases"] = AllAlignedBases,  _["AllAlignedQuality"] = AllAlignedQuality
+//     );
+//   }
+//   else{
+//     return DataFrame::create (
+//         _["ReferenceSpec"] = RefSpec, _["ReferencePosition"] = RefPos, _["ReferenceBase"] = RefBase, _["PileupDepth"] = PileDepth , _["AllAlignedBases"] = AllAlignedBases, _["AccensionNumber"] = AllAcc
+//     );
+//   }
+// }
+
 //Ran 1/8/2016
 //> system.time(getPileUp("SRR1596669",'21',1,20000000, Quality =  F))
 //user  system elapsed 
