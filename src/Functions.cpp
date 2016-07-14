@@ -67,6 +67,15 @@ DataFrame getReferenceCount(CharacterVector accs, bool track=false) {
   return DataFrame::create(_["Run"]= refs, _["ReferenceCount"]= refCount);
 }
 
+//'
+//' This returns data relavent to GAlignments objects
+//' @author Rosa Choe
+//' @param acc An accession or a path to an actual SRA file (with .sra suffix)
+//' @param seqname Reference name for alignments
+//' @param low_bound A lower bound for the locations of interest
+//' @param up_bound An upper bound for the locations of interest
+//' @param track A boolean value that represents whether or not to print indices while running
+//' @return a Rcpp::DataFrame containing data relavent to GAlignments objects
 // [[Rcpp::export]]
 DataFrame cpp_getGAlignments(std::string acc, std::string seqname, int low_bound = 1, int up_bound = 0, bool track = false) {
   ReadCollection run = ncbi::NGS::openReadCollection(acc);
@@ -128,10 +137,19 @@ DataFrame cpp_getGAlignments(std::string acc, std::string seqname, int low_bound
     _["width"] = width,
     _["njunc"] = njunc
   );
-  
-  // Environment myEnv = Environment::global_env();
-  // Function sort = myEnv["sortAlignments"];
-  // return sort(d);
 }
 
-
+//'
+//' This checks if a string is a valid accession
+//' @author Rosa Choe
+//' @param acc An accession string
+//' @return a boolean value representing whether or not the inputted string is a valid accession
+// [[Rcpp::export]]
+bool validAccession(std::string acc) {
+  try {
+    getReference(acc);
+    return true;
+  } catch (...){
+    return false;
+  }
+}
