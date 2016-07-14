@@ -55,7 +55,7 @@ long getFastqCount(Rcpp::String acc, bool forward_to_r = true) {
 //' @examples
 //' getFastqReads('SRR000123',10)
 // [[Rcpp::export]]
-Rcpp::List getFastqReads(Rcpp::String acc, long max_num_reads) {
+Rcpp::List getFastqReads(Rcpp::String acc, long max_num_reads = 0) {
   try {
     ReadCollection run = ncbi::NGS::openReadCollection ( acc );
     
@@ -92,7 +92,7 @@ Rcpp::List getFastqReads(Rcpp::String acc, long max_num_reads) {
 //' @examples
 //' getFastqReadsWithQuality('SRR000123',10)
 // [[Rcpp::export]]
-Rcpp::List getFastqReadsWithQuality(Rcpp::String acc, long max_num_reads) {
+Rcpp::List getFastqReadsWithQuality(Rcpp::String acc, long max_num_reads = 0) {
   try {
     ReadCollection run = ncbi::NGS::openReadCollection ( acc );
     

@@ -56,6 +56,33 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// getReferenceCount
+DataFrame getReferenceCount(CharacterVector accs, bool track);
+RcppExport SEXP SRA2R_getReferenceCount(SEXP accsSEXP, SEXP trackSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< CharacterVector >::type accs(accsSEXP);
+    Rcpp::traits::input_parameter< bool >::type track(trackSEXP);
+    __result = Rcpp::wrap(getReferenceCount(accs, track));
+    return __result;
+END_RCPP
+}
+// cpp_getGAlignments
+DataFrame cpp_getGAlignments(std::string acc, std::string seqname, int low_bound, int up_bound, bool track);
+RcppExport SEXP SRA2R_cpp_getGAlignments(SEXP accSEXP, SEXP seqnameSEXP, SEXP low_boundSEXP, SEXP up_boundSEXP, SEXP trackSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< std::string >::type acc(accSEXP);
+    Rcpp::traits::input_parameter< std::string >::type seqname(seqnameSEXP);
+    Rcpp::traits::input_parameter< int >::type low_bound(low_boundSEXP);
+    Rcpp::traits::input_parameter< int >::type up_bound(up_boundSEXP);
+    Rcpp::traits::input_parameter< bool >::type track(trackSEXP);
+    __result = Rcpp::wrap(cpp_getGAlignments(acc, seqname, low_bound, up_bound, track));
+    return __result;
+END_RCPP
+}
 // getPileUp
 DataFrame getPileUp(Rcpp::String acc, Rcpp::String refname, int start, int stop, int MinPileUpDepth, bool Quality);
 RcppExport SEXP SRA2R_getPileUp(SEXP accSEXP, SEXP refnameSEXP, SEXP startSEXP, SEXP stopSEXP, SEXP MinPileUpDepthSEXP, SEXP QualitySEXP) {
@@ -73,13 +100,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // getFastqCount
-long getFastqCount(Rcpp::String acc);
-RcppExport SEXP SRA2R_getFastqCount(SEXP accSEXP) {
+long getFastqCount(Rcpp::String acc, bool forward_to_r);
+RcppExport SEXP SRA2R_getFastqCount(SEXP accSEXP, SEXP forward_to_rSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< Rcpp::String >::type acc(accSEXP);
-    __result = Rcpp::wrap(getFastqCount(acc));
+    Rcpp::traits::input_parameter< bool >::type forward_to_r(forward_to_rSEXP);
+    __result = Rcpp::wrap(getFastqCount(acc, forward_to_r));
     return __result;
 END_RCPP
 }
@@ -118,20 +146,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< long >::type start(startSEXP);
     Rcpp::traits::input_parameter< long >::type stop(stopSEXP);
     __result = Rcpp::wrap(getSRAReadsWithRegion(acc, refname, start, stop));
-    return __result;
-END_RCPP
-}
-// getBamReadsWithRegion
-Rcpp::List getBamReadsWithRegion(Rcpp::String acc, Rcpp::String refname, long start, long stop);
-RcppExport SEXP SRA2R_getBamReadsWithRegion(SEXP accSEXP, SEXP refnameSEXP, SEXP startSEXP, SEXP stopSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< Rcpp::String >::type acc(accSEXP);
-    Rcpp::traits::input_parameter< Rcpp::String >::type refname(refnameSEXP);
-    Rcpp::traits::input_parameter< long >::type start(startSEXP);
-    Rcpp::traits::input_parameter< long >::type stop(stopSEXP);
-    __result = Rcpp::wrap(getBamReadsWithRegion(acc, refname, start, stop));
     return __result;
 END_RCPP
 }

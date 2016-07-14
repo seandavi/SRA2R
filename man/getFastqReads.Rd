@@ -4,7 +4,7 @@
 \alias{getFastqReads}
 \title{The reads in the read collection.}
 \usage{
-getFastqReads(acc, max_num_reads)
+getFastqReads(acc, max_num_reads = 0L)
 }
 \arguments{
 \item{acc}{An accession or a path to an actual SRA file (with .sra suffix)}

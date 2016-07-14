@@ -63,6 +63,14 @@ alignReads <- function(acc) {
     .Call('SRA2R_alignReads', PACKAGE = 'SRA2R', acc)
 }
 
+getReferenceCount <- function(accs, track = FALSE) {
+    .Call('SRA2R_getReferenceCount', PACKAGE = 'SRA2R', accs, track)
+}
+
+cpp_getGAlignments <- function(acc, seqname, low_bound = 1L, up_bound = 0L, track = FALSE) {
+    .Call('SRA2R_cpp_getGAlignments', PACKAGE = 'SRA2R', acc, seqname, low_bound, up_bound, track)
+}
+
 #' The readCount in the read collection.
 #'
 #' This simply returns the full read count.
@@ -89,8 +97,8 @@ getPileUp <- function(acc, refname, start = 1L, stop = 0L, MinPileUpDepth = 0L, 
 #' @export
 #' @examples
 #' getFastqCount('SRR000123')
-getFastqCount <- function(acc) {
-    .Call('SRA2R_getFastqCount', PACKAGE = 'SRA2R', acc)
+getFastqCount <- function(acc, forward_to_r = TRUE) {
+    .Call('SRA2R_getFastqCount', PACKAGE = 'SRA2R', acc, forward_to_r)
 }
 
 #' The reads in the read collection.
@@ -103,7 +111,7 @@ getFastqCount <- function(acc) {
 #' @export
 #' @examples
 #' getFastqReads('SRR000123',10)
-getFastqReads <- function(acc, max_num_reads) {
+getFastqReads <- function(acc, max_num_reads = 0L) {
     .Call('SRA2R_getFastqReads', PACKAGE = 'SRA2R', acc, max_num_reads)
 }
 
@@ -117,7 +125,7 @@ getFastqReads <- function(acc, max_num_reads) {
 #' @export
 #' @examples
 #' getFastqReadsWithQuality('SRR000123',10)
-getFastqReadsWithQuality <- function(acc, max_num_reads) {
+getFastqReadsWithQuality <- function(acc, max_num_reads = 0L) {
     .Call('SRA2R_getFastqReadsWithQuality', PACKAGE = 'SRA2R', acc, max_num_reads)
 }
 
@@ -135,22 +143,6 @@ getFastqReadsWithQuality <- function(acc, max_num_reads) {
 #' getSRAReadsWithRegion('SRR789392','NC_000020.10', 62926240, 62958722)
 getSRAReadsWithRegion <- function(acc, refname, start, stop) {
     .Call('SRA2R_getSRAReadsWithRegion', PACKAGE = 'SRA2R', acc, refname, start, stop)
-}
-
-#' The reads in the specified region in an SRA record.
-#'
-#' This returns the all reads in the specified region.
-#'
-#' @param acc An accession or a path to an actual SRA file (with .sra suffix)
-#' @param ref The reference name 
-#' @param start Start position (inclusive)
-#' @param stop End position (inclusive)
-#' @return the reads in the collection
-#' @export
-#' @examples
-#' getBamReadsWithRegion('SRR789392','NC_000020.10', 62926240, 62958722)
-getBamReadsWithRegion <- function(acc, refname, start, stop) {
-    .Call('SRA2R_getBamReadsWithRegion', PACKAGE = 'SRA2R', acc, refname, start, stop)
 }
 
 #' The readCount in the read collection.
@@ -174,8 +166,6 @@ getReference <- function(acc) {
 #' @return the number of reads in the collection
 #' @export
 #' 
-NULL
-
 refBases <- function(acc) {
     .Call('SRA2R_refBases', PACKAGE = 'SRA2R', acc)
 }

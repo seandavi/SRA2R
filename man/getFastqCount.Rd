@@ -4,7 +4,7 @@
 \alias{getFastqCount}
 \title{The readCount in the read collection.}
 \usage{
-getFastqCount(acc)
+getFastqCount(acc, forward_to_r = TRUE)
 }
 \arguments{
 \item{acc}{An accession or a path to an actual SRA file (with .sra suffix)}

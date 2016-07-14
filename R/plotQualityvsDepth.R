@@ -1,7 +1,3 @@
-#'@depend ggplot2
-#'@depend reshape2
-#'@depend ShortRead
-#'@depend data.table
 #'@name plotQualityvsDepth.R
 #'@title Plot quality vs depth for an accession
 #'@param acc Accension number
