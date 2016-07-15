@@ -1,6 +1,11 @@
 library(shiny)
 library(ggplot2)
 library(gtools)
+if (!exists("validaAccession")) {
+  library(devtools)
+  library(roxygen2)
+  load_all()
+}
 # Coverage plot representing pileup depth of given SRA accession and locationon genome
 ui <- shinyUI(fluidPage(
   titlePanel("Coverage Plot"),
