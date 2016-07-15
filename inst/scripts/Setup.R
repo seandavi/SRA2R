@@ -1,4 +1,6 @@
 install.packages("roxygen2", repos="http://cran.rstudio.com/")
+install.packages("rentrez")
+install.packages("xml2")
 ### SRAdb
 source("https://bioconductor.org/biocLite.R")
 biocLite("GenomicRanges")
@@ -11,6 +13,8 @@ library(GenomicRanges)
 library(GenomicAlignments)
 library(VariantAnnotation)
 library(dplyr)
+library(rentrez)
+library(xml2)
 load_all()
 
 sortAlignments = function(g) {
