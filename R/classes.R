@@ -11,7 +11,7 @@
 # VIRTUAL base class
 setClass('.SRA2RBase')
 
-.srrRegex = '^[DSE]RR\\d{6}$'
+.srrRegex = '^[DSE]RR\\d{6,7}$'
 
 .srrValidity = function(object) {
   valid = grepl(.srrRegex,object,perl=TRUE)
