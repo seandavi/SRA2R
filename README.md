@@ -10,12 +10,17 @@ In a terminal:
 
 ```sh
 docker run -d -p 8787:8787 seandavi/sra2r       ## run docker in background and mirror site running RStudio
-docker-machine ip                               ## obtain IP address of Docker machine
+docker-machine ip                               ## obtain IP address of Docker machine (Mac/Windows only)
 docker exec -ti DOCKER_PROCESS_ID /bin/bash     ## run terminal in Docker machine
+                                                ##   only needed if you need command-line access to R
 ```
 
-In a browser, navigate to http://192.168.99.100:8787 (or whatever host IP address is available for your system).
-RStudio will be running on the docker image, so connect to it (details depend on docker environment).
+RStudio should be running on the docker image, so using the address should connect to it 
+(details depend on docker environment).vIn a browser, navigate to http://DOCKER_IP:8787/. 
+DOCKER_IP should be replaced with:
+- the output of the `docker-machine ip` on windows or Mac
+- `localhost` or `127.0.0.1` on linux
+
 Checkout the package using git (or Rstudio) and change the working directory to the 
 SRA2R directory (with the DESCRIPTION file in it).  Then, install the package for local development
 using devtools.
