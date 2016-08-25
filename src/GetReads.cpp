@@ -46,10 +46,10 @@ long getFastqCount(Rcpp::String acc, bool forward_to_r = true) {
 
 //' The reads in the read collection.
 //'
-//' This returns the all reads.
+//' This returns ALL reads or max_num_reads (with default of 0 meaning ALL reads).
 //'
 //' @param acc An accession or a path to an actual SRA file (with .sra suffix)
-//' @param n The number of reads to return
+//' @param n The number of reads to return (default of 0 for ALL reads)
 //' @return the reads in the collection
 //' @export
 //' @examples
@@ -105,6 +105,9 @@ Rcpp::List getFastqReadsWithQuality(Rcpp::String acc, long max_num_reads = 0) {
     
     
     for(int i = 0; rgi.nextRead() && i<max_num_reads; i++) {
+      if((i % 100000) == 0) {
+        Rcpp::checkUserInterrupt();
+      }
       while ( rgi.nextFragment() ) {
         reads.push_back(rgi.getFragmentBases().toString());
         qualities.push_back(rgi.getFragmentQualities().toString());
