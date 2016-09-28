@@ -100,6 +100,16 @@ any(gr %over% ar)
 any(gr2 %over% ar)
 ```
 
+###Obtain Pileup Represented as VRanges
+```{r eval=TRUE, warning=FALSE}
+pileupVRange('SRR390728', '1', 10000, 10003)
+```
+
+###Pileup Plot Coverage Shiny App
+```{r eval=TRUE, warning=FALSE}
+runApp('inst/PileupPlot')
+```
+
 ###Shared Files with Local Machine and Docker
 ```{r eval=FALSE}
 1. Download file to Local Machine
